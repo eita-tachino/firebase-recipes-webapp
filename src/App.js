@@ -108,6 +108,29 @@ function App() {
     }
   };
 
+  const handleDeleteRecipe = async (recipeId) => {
+    const deleteConfirmation = window.confirm(
+      "Are you sure you want to delete this recipe? Ok for Yes. Cancel for No."
+    );
+
+    if (deleteConfirmation) {
+      try {
+        await FirebaseFirestoreService.deleteDocument("recipes", recipeId);
+
+        handleFetchRecipes();
+
+        setCurrentRecipe(null);
+
+        window.scrollTo(0, 0);
+
+        alert(`succesfully deleted a recipe with an ID = ${recipeId}`);
+      } catch (error) {
+        alert(error.message);
+        throw error;
+      }
+    }
+  };
+
   const handleEditRecipeClick = (recipeId) => {
     const selectedRecipe = recipes.find((recipe) => {
       return recipe.id === recipeId;
@@ -193,6 +216,7 @@ function App() {
             existingRecipe={currentRecipe}
             handleAddRecipe={handleAddRecipe}
             handleUpdateRecipe={handleUpdateRecipe}
+            handleDeleteRecipe={handleDeleteRecipe}
             handleEditRecipeCancel={handleEditRecipeCancel}
           ></AddEditRecipeForm>
         ) : (
