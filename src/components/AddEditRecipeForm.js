@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 
+import ImageUploadPreview from "./ImageUploadPreview";
+
 const AddEditRecipeForm = ({
   existingRecipe,
   handleAddRecipe,
@@ -14,6 +16,7 @@ const AddEditRecipeForm = ({
       setDirection(existingRecipe.direction);
       setPublishDate(existingRecipe.publishDate.toISOString().split("T")[0]);
       setIngredients(existingRecipe.ingredients);
+      setImageUrl(existingRecipe.imageUrl);
     } else {
       resetForm();
     }
@@ -27,11 +30,17 @@ const AddEditRecipeForm = ({
   const [direction, setDirection] = useState("");
   const [ingredients, setIngredients] = useState([]);
   const [ingredientName, setIngredientName] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
 
   const handleRecipeFormSubmit = (e) => {
     e.preventDefault();
     if (!ingredients.length === 0) {
       alert("Ingredients cannot be empty. Please add at least 1 ingredient");
+      return;
+    }
+
+    if (!imageUrl) {
+      alert("Missing recipe image. Please add a recipe image");
       return;
     }
 
@@ -44,6 +53,7 @@ const AddEditRecipeForm = ({
       publishDate: new Date(publishDate),
       isPublished,
       ingredients,
+      imageUrl,
     };
 
     if (existingRecipe) {
@@ -75,6 +85,7 @@ const AddEditRecipeForm = ({
     setDirection("");
     setPublishDate("");
     setIngredients([]);
+    setImageUrl("");
   };
 
   return (
@@ -84,6 +95,15 @@ const AddEditRecipeForm = ({
     >
       {existingRecipe ? <h2>Update the Recipe</h2> : <h2>Add a New Recipe</h2>}
       <div className="top-form-section">
+        <div className="image-input-box">
+          Recipe Image
+          <ImageUploadPreview
+            basePath="recipes"
+            existingImageUrl={imageUrl}
+            handleUploadFinish={(downloadUrl) => setImageUrl(downloadUrl)}
+            handleUploadCancel={() => setImageUrl("")}
+          ></ImageUploadPreview>
+        </div>
         <div className="fields">
           <label className="recipe-label input-label">
             Recipe Name:

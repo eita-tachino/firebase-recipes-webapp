@@ -292,12 +292,21 @@ function App() {
                         <div className="unpublished">UNPUBLISHED</div>
                       ) : null}
                       <div className="recipe-name">{recipe.name}</div>
+                      <div className="recipe-image-box">
+                        {recipe.imageUrl ? (
+                          <img
+                            src={recipe.imageUrl}
+                            alt={recipe.name}
+                            className="recipe-image"
+                          />
+                        ) : null}
+                      </div>
                       <div className="recipe-field">
-                        Category: {lookupCategoryLabel(recipe.category)}
+                        🎈 Category: {lookupCategoryLabel(recipe.category)}
                       </div>
                       <div className="recipe-field">
                         {/* Publish Date: {recipe.publishDate.toString()} */}
-                        Publish Date: {formatDate(recipe.publishDate)}
+                        🎈 Publish Date: {formatDate(recipe.publishDate)}
                       </div>
                       {user ? (
                         <button
